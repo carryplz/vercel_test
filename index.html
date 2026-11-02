@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>상품 조회 · 검사</title>
+<style>
+  :root {
+    --bg: #f6f7f9; --panel: #ffffff; --text: #1d232b; --muted: #66707c; --line: #e2e5ea;
+    --accent: #2f5bd3; --accent-soft: #e8eefc;
+    --err: #c0392b; --err-soft: #fdecea; --warn: #b7791f; --warn-soft: #fdf4e3;
+    --ok: #2e7d4f; --ok-soft: #e7f5ec; --info: #4a5568; --info-soft: #eef0f3;
+    --emph: #fff1e6;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14171c; --panel: #1c2027; --text: #e6e9ee; --muted: #9aa3ae; --line: #2c323b;
+      --accent: #7b9cff; --accent-soft: #232d45;
+      --err: #ff7b6e; --err-soft: #3a2220; --warn: #f0b85a; --warn-soft: #382d1a;
+      --ok: #6fcf97; --ok-soft: #1c3326; --info: #b8c0cc; --info-soft: #262b33;
+      --emph: #3a2b1f;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text);
+    font: 14px/1.5 "맑은 고딕", "Malgun Gothic", system-ui, sans-serif; }
+  header { display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+    padding: 14px 20px; background: var(--panel); border-bottom: 1px solid var(--line); }
+  header h1 { font-size: 17px; margin: 0; }
+  .badge { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--info-soft); color: var(--info); }
+  .badge.dummy { background: var(--warn-soft); color: var(--warn); }
+  .spacer { flex: 1; }
+  button, select, input { font: inherit; color: inherit; }
+  button { border: 1px solid var(--line); background: var(--panel); padding: 5px 12px; border-radius: 6px; cursor: pointer; }
+  button:hover { border-color: var(--accent); }
+  nav { display: flex; gap: 4px; padding: 0 20px; background: var(--panel); border-bottom: 1px solid var(--line); }
+  nav button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; padding: 10px 14px; background: none; color: var(--muted); }
+  nav button.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  nav .count { font-size: 11px; margin-left: 4px; padding: 0 6px; border-radius: 999px; background: var(--err-soft); color: var(--err); }
+  main { padding: 16px 20px; }
+  .hidden { display: none !important; }
+  .layout { display: grid; grid-template-columns: 320px 1fr; gap: 16px; align-items: start; }
+  @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } main { padding: 12px 16px; } }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+  .filters { padding: 12px; display: grid; gap: 8px; border-bottom: 1px solid var(--line); }
+  .filters input, .filters select { width: 100%; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); }
+  .filters label { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .filters label input { width: auto; }
+  .list { max-height: calc(100vh - 290px); overflow: auto; }
+  @media (max-width: 800px) { .list { max-height: 320px; } }
+  .item { padding: 10px 12px; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .item:hover { background: var(--accent-soft); }
+  .item.sel { background: var(--accent-soft); box-shadow: inset 3px 0 0 var(--accent); }
+  .item .top { display: flex; justify-content: space-between; gap: 8px; }
+  .item .meta { font-size: 12px; color: var(--muted); }
+  .list-foot { padding: 8px 12px; font-size: 12px; color: var(--muted); }
+  .detail { padding: 18px 20px; }
+  .detail h2 { margin: 0 0 4px; font-size: 20px; }
+  .detail h3 { font-size: 14px; margin: 22px 0 8px; color: var(--muted); }
+  .kv { display: grid; grid-template-columns: 110px 1fr; gap: 4px 12px; }
+  .kv dt { color: var(--muted); }
+  .kv dd { margin: 0; }
+  .table-wrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; white-space: nowrap; }
+  tr.deny td { background: var(--err-soft); }
+  tr.emph td { background: var(--emph); }
+  .chip { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; margin: 0 4px 4px 0; }
+  .chip.contain { background: var(--err-soft); color: var(--err); }
+  .chip.cross { background: var(--warn-soft); color: var(--warn); }
+  .chip.none { background: var(--ok-soft); color: var(--ok); }
+  .chip.cat { background: var(--info-soft); color: var(--info); }
+  .src { font-size: 12px; color: var(--muted); }
+  .quote { font-size: 12px; color: var(--muted); border-left: 2px solid var(--line); padding-left: 8px; margin-top: 2px; }
+  .empty { color: var(--muted); padding: 30px; text-align: center; }
+  .summary { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+  .stat { padding: 10px 14px; min-width: 120px; }
+  .stat b { display: block; font-size: 22px; }
+  .stat.err b { color: var(--err); } .stat.warn b { color: var(--warn); } .stat.ok b { color: var(--ok); }
+  .check { padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  .check:last-child { border-bottom: 0; }
+  .check .head { display: flex; gap: 10px; align-items: center; }
+  .sev { font-size: 11px; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+  .sev.err { background: var(--err-soft); color: var(--err); }
+  .sev.warn { background: var(--warn-soft); color: var(--warn); }
+  .sev.info { background: var(--info-soft); color: var(--info); }
+  .sev.ok { background: var(--ok-soft); color: var(--ok); }
+  .check ul { margin: 6px 0 0; padding-left: 20px; font-size: 13px; }
+  .check .desc { font-size: 12px; color: var(--muted); }
+  a.plink { color: var(--accent); cursor: pointer; text-decoration: underline; }
+  .error-box { margin: 20px; padding: 14px; border-radius: 8px; background: var(--err-soft); color: var(--err); white-space: pre-wrap; }
+  /* 추가 · 삭제 */
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.danger { color: var(--err); }
+  button.danger:hover { border-color: var(--err); background: var(--err-soft); }
+  button.sm { padding: 1px 8px; font-size: 12px; }
+  .sec-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 22px 0 8px; }
+  .sec-head h3 { margin: 0; }
+  .title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  form.add { border: 1px dashed var(--accent); border-radius: 8px; padding: 12px; margin: 8px 0 12px; background: var(--accent-soft); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px 12px; }
+  .grid label { display: grid; gap: 2px; font-size: 12px; color: var(--muted); }
+  .grid label.wide { grid-column: 1 / -1; }
+  .grid label.check { display: flex; align-items: center; gap: 6px; align-self: end; padding-bottom: 6px; }
+  .grid input, .grid select, .grid textarea { width: 100%; padding: 5px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+  .grid input:disabled { opacity: .5; }
+  .req::after { content: " *"; color: var(--err); }
+  .form-foot { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  .form-err { color: var(--err); font-size: 13px; }
+  .toast { position: fixed; right: 16px; bottom: 16px; padding: 10px 14px; border-radius: 8px;
+    background: var(--text); color: var(--bg); font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.show { opacity: .92; }
+  body.readonly .w { display: none !important; }
+</style>
+</head>
+<body>
+<header>
+  <h1>상품 조회 · 검사</h1>
+  <span class="badge dummy">가상 데이터 · 실습 전용</span>
+  <span class="badge" id="source">불러오는 중…</span>
+  <span class="badge" id="mode"></span>
+  <span class="spacer"></span>
+  <button id="reload">다시 불러오기</button>
+</header>
+<nav>
+  <button data-tab="browse" class="active">상품 조회</button>
+  <button data-tab="checks">검사 <span class="count hidden" id="issue-count"></span></button>
+  <button data-tab="shipping">배송정책</button>
+</nav>
+<main>
+  <div id="error" class="error-box hidden"></div>
+
+  <section id="tab-browse" class="layout">
+    <div class="panel">
+      <div class="filters">
+        <button id="new-product" class="primary w">+ 상품 추가</button>
+        <input id="q" type="search" placeholder="상품명 · 코드 · 원재료 · 주의사항 검색">
+        <select id="f-cat"><option value="">분류: 전체</option></select>
+        <select id="f-allergen">
+          <option value="">알레르기: 전체</option>
+          <option value="__has">알레르기 있음</option>
+          <option value="__none">알레르기 없음</option>
+        </select>
+        <select id="f-temp">
+          <option value="">보관: 전체</option>
+          <option value="냉장:true">냉장 보관 가능</option>
+          <option value="냉장:false">냉장 보관 금지</option>
+          <option value="냉동:true">냉동 보관 가능</option>
+          <option value="냉동:false">냉동 보관 금지</option>
+          <option value="상온:true">상온 보관 가능</option>
+        </select>
+        <label><input id="f-emph" type="checkbox"> 강조(굵게 표시) 항목이 있는 상품만</label>
+      </div>
+      <div class="list" id="list"></div>
+      <div class="list-foot" id="list-foot"></div>
+    </div>
+    <div class="panel detail" id="detail"><div class="empty">왼쪽에서 상품을 고르세요</div></div>
+  </section>
+
+  <section id="tab-checks" class="hidden">
+    <div class="summary" id="check-summary"></div>
+    <div class="panel" id="check-list"></div>
+  </section>
+
+  <section id="tab-shipping" class="hidden">
+    <div class="panel detail" id="shipping"></div>
+  </section>
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+// 화면 상태
+let DB = null;
+let selected = null;
+let creating = false;   // 상품 추가 폼 표시 중
+let CODES = {};         // 서버가 내려주는 허용 값 목록(스키마 CHECK와 같음)
+let WRITABLE = false;
+
+const $ = (id) => document.getElementById(id);
+// HTML 이스케이프 — 데이터 값은 항상 이걸 거쳐 출력
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const won = (n) => (typeof n === "number" ? n.toLocaleString("ko-KR") + "원" : esc(n));
+const by = (arr, key) => arr.reduce((m, r) => ((m[r[key]] ??= []).push(r), m), {});
+
+async function load() {
+  $("error").classList.add("hidden");
+  $("source").textContent = "불러오는 중…";
+  try {
+    const res = await fetch("/api/data");
+    const body = await res.json();
+    if (!res.ok) throw new Error(body.error || res.status);
+    DB = index(body.data);
+    CODES = body.codes;
+    WRITABLE = body.writable;
+    document.body.classList.toggle("readonly", !WRITABLE);
+    $("mode").textContent = WRITABLE ? "추가 · 삭제 가능" : "읽기 전용";
+    if (!DB.products.some((p) => p.product_id === selected)) selected = null;
+    $("source").textContent = `데이터: ${body.source} · ${new Date(body.loadedAt).toLocaleTimeString("ko-KR")}`;
+    fillCategoryFilter();
+    fillAllergenFilter();
+    renderList();
+    renderDetail();
+    renderChecks();
+    renderShipping();
+  } catch (e) {
+    $("source").textContent = "불러오기 실패";
+    $("error").textContent = "데이터를 불러오지 못했습니다.\n" + e.message;
+    $("error").classList.remove("hidden");
+  }
+}
+
+// 테이블을 상품코드 기준으로 묶어 둠
+function index(d) {
+  const allergenName = Object.fromEntries(d.allergens.map((a) => [a.allergen_id, a.name]));
+  return {
+    raw: d,
+    products: [...d.products].sort((a, b) => a.product_id.localeCompare(b.product_id)),
+    storage: by(d.storage_rules, "product_id"),
+    allergens: by(d.product_allergens.map((r) => ({ ...r, name: allergenName[r.allergen_id] })), "product_id"),
+    cautions: by(d.cautions, "product_id"),
+    allergenName,
+  };
+}
+
+function fillCategoryFilter() {
+  const sel = $("f-cat"), cur = sel.value;
+  const cats = [...new Set(DB.products.map((p) => p.category))].sort();
+  sel.innerHTML = `<option value="">분류: 전체</option>` + cats.map((c) => `<option>${esc(c)}</option>`).join("");
+  sel.value = cats.includes(cur) ? cur : "";
+}
+
+function fillAllergenFilter() {
+  const sel = $("f-allergen"), cur = sel.value;
+  const opts = DB.raw.allergens.map((a) => `<option value="no:${esc(a.allergen_id)}">${esc(a.name)} 없는 상품</option>`
+    + `<option value="has:${esc(a.allergen_id)}">${esc(a.name)} 관련 상품</option>`).join("");
+  sel.innerHTML = `<option value="">알레르기: 전체</option><option value="__has">알레르기 있음</option><option value="__none">알레르기 없음</option>` + opts;
+  sel.value = [...sel.options].some((o) => o.value === cur) ? cur : "";
+}
+
+function matches(p) {
+  const st = DB.storage[p.product_id] || [], al = DB.allergens[p.product_id] || [], ca = DB.cautions[p.product_id] || [];
+  const q = $("q").value.trim().toLowerCase();
+  if (q) {
+    const hay = [p.product_id, p.name, p.ingredients, p.description, p.origin, ...ca.map((c) => c.content), ...al.map((a) => a.name)]
+      .join(" ").toLowerCase();
+    if (!hay.includes(q)) return false;
+  }
+  if ($("f-cat").value && p.category !== $("f-cat").value) return false;
+  const fa = $("f-allergen").value;
+  if (fa === "__has" && !al.length) return false;
+  if (fa === "__none" && al.length) return false;
+  if (fa.startsWith("has:") && !al.some((a) => a.allergen_id === fa.slice(4))) return false;
+  if (fa.startsWith("no:") && al.some((a) => a.allergen_id === fa.slice(3))) return false;
+  const ft = $("f-temp").value;
+  if (ft) {
+    const [temp, allowed] = ft.split(":");
+    if (!st.some((s) => s.temperature === temp && String(s.allowed) === allowed)) return false;
+  }
+  if ($("f-emph").checked && ![...st, ...al, ...ca].some((r) => r.emphasized)) return false;
+  return true;
+}
+
+function renderList() {
+  const shown = DB.products.filter(matches);
+  $("list").innerHTML = shown.map((p) => {
+    const al = DB.allergens[p.product_id] || [];
+    return `<div class="item ${p.product_id === selected ? "sel" : ""}" data-id="${esc(p.product_id)}">
+      <div class="top"><b>${esc(p.name)}</b><span>${won(p.price)}</span></div>
+      <div class="meta">${esc(p.product_id)} · ${esc(p.category)}${al.length ? " · 알레르기 " + al.map((a) => esc(a.name)).join(", ") : ""}</div>
+    </div>`;
+  }).join("") || `<div class="empty">조건에 맞는 상품이 없습니다</div>`;
+  $("list-foot").textContent = `${shown.length} / ${DB.products.length}건`;
+}
+
+function quote(r) {
+  return r.source_text ? `<div class="quote">“${esc(r.source_text)}” — ${esc(r.source_doc)} · ${esc(r.source_section)}</div>` : "";
+}
+
+// ---- 추가 폼 정의: 필드 키, 라벨, 입력 종류
+const opts = (key) => (CODES[key] || []).map((v) => [v, v]);
+const FORMS = {
+  products: () => [
+    { k: "product_id", label: "상품코드", req: true, ph: "P-0501" },
+    { k: "name", label: "상품명", req: true },
+    { k: "category", label: "분류", req: true, opts: opts("category") },
+    { k: "price", label: "판매가(원)", req: true, type: "number" },
+    { k: "net_weight", label: "용량", ph: "500g" },
+    { k: "pack_info", label: "구성", ph: "10개" },
+    { k: "origin", label: "원산지" },
+    { k: "ingredients", label: "원재료" },
+    { k: "sale_period", label: "판매기간", ph: "비우면 연중" },
+    { k: "allergen_label", label: "알레르기 문서표기", req: true, opts: opts("allergen_label") },
+    { k: "source_doc", label: "출처문서", req: true, ph: "P-0501_상품명.md" },
+    { k: "description", label: "상품설명", wide: true },
+  ],
+  storage_rules: () => [
+    { k: "timing", label: "시점", req: true, opts: opts("timing") },
+    { k: "temperature", label: "보관온도", req: true, opts: opts("temperature") },
+    { k: "allowed", label: "허용", req: true, opts: [["true", "가능"], ["false", "금지"]] },
+    { k: "days", label: "보관일수", type: "number", ph: "가능일 때 필수" },
+    { k: "period_text", label: "원문 표기", ph: "3주" },
+    { k: "note", label: "사유 · 비고" },
+    ...SOURCE_FIELDS(),
+  ],
+  product_allergens: () => [
+    { k: "allergen_id", label: "알레르기", req: true, opts: DB.raw.allergens.map((a) => [a.allergen_id, a.name]) },
+    { k: "relation", label: "관계", req: true, opts: opts("relation") },
+    ...SOURCE_FIELDS(),
+  ],
+  cautions: () => [
+    { k: "type", label: "유형", req: true, opts: opts("type") },
+    { k: "content", label: "내용", req: true, wide: true },
+    ...SOURCE_FIELDS(),
+  ],
+};
+const SOURCE_FIELDS = () => [
+  { k: "emphasized", label: "문서에서 굵게 강조", type: "checkbox" },
+  { k: "source_section", label: "근거 섹션", req: true, opts: opts("source_section") },
+  { k: "source_text", label: "근거 원문(문서 문장 그대로)", req: true, wide: true },
+];
+
+function formHtml(table, title) {
+  const fields = FORMS[table]().map((f) => {
+    const name = `name="${f.k}"`, req = f.req ? "required" : "";
+    let input;
+    if (f.type === "checkbox") {
+      return `<label class="check"><input type="checkbox" ${name}> ${esc(f.label)}</label>`;
+    } else if (f.opts) {
+      input = `<select ${name} ${req}>${f.req ? "" : `<option value=""></option>`}${f.opts.map(([v, t]) => `<option value="${esc(v)}">${esc(t)}</option>`).join("")}</select>`;
+    } else {
+      input = `<input ${name} ${req} type="${f.type || "text"}" ${f.type === "number" ? 'min="1" step="1"' : ""} placeholder="${esc(f.ph || "")}">`;
+    }
+    return `<label class="${f.wide ? "wide" : ""}"><span class="${f.req ? "req" : ""}">${esc(f.label)}</span>${input}</label>`;
+  }).join("");
+  return `<form class="add" data-table="${table}">
+    ${title ? `<b>${esc(title)}</b>` : ""}
+    <div class="grid">${fields}</div>
+    <div class="form-foot"><button class="primary" type="submit">저장</button>
+      <button type="button" data-cancel>취소</button><span class="form-err"></span></div>
+  </form>`;
+}
+
+// 폼 값 → 요청 본문. 체크박스는 boolean, 빈칸은 null
+function formData(form) {
+  const body = {};
+  for (const el of form.elements) {
+    if (!el.name) continue;
+    if (el.type === "checkbox") body[el.name] = el.checked;
+    else if (el.name === "allowed") body[el.name] = el.value === "true";
+    else if (el.type === "number") body[el.name] = el.value === "" ? null : Number(el.value);
+    else body[el.name] = el.value.trim() === "" ? null : el.value.trim();
+  }
+  return body;
+}
+
+async function api(method, url, body) {
+  const res = await fetch(url, {
+    method,
+    headers: { "Content-Type": "application/json", "X-Viewer": "1" },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  const out = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(out.error || `HTTP ${res.status}`);
+  return out;
+}
+
+function toast(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+const secHead = (title, table) => `<div class="sec-head"><h3>${title}</h3>
+  <button class="sm w" data-add="${table}">+ 추가</button></div>
+  <div class="form-slot" data-slot="${table}"></div>`;
+const delBtn = (table, key, label) => `<button class="sm danger w" data-del="${table}" data-key="${esc(key)}" data-label="${esc(label)}">삭제</button>`;
+
+function renderDetail() {
+  if (creating) {
+    $("detail").innerHTML = `<h2>상품 추가</h2><div class="src">보관조건 · 알레르기 · 주의사항은 상품을 만든 뒤 상세 화면에서 추가</div>`
+      + formHtml("products");
+    $("detail").querySelector("input")?.focus();
+    return;
+  }
+  const p = DB?.products.find((x) => x.product_id === selected);
+  if (!p) { $("detail").innerHTML = `<div class="empty">왼쪽에서 상품을 고르세요</div>`; return; }
+  const st = DB.storage[p.product_id] || [], al = DB.allergens[p.product_id] || [], ca = DB.cautions[p.product_id] || [];
+  const order = { "개봉 전": 0, "수령 후": 1, "개봉 후": 2 };
+  st.sort((a, b) => (order[a.timing] ?? 9) - (order[b.timing] ?? 9));
+  $("detail").innerHTML = `
+    <div class="title-row"><h2>${esc(p.name)}</h2>${delBtn("products", p.product_id, `상품 ${p.product_id} ${p.name}`)}</div>
+    <div class="src">${esc(p.product_id)} · <span class="chip cat">${esc(p.category)}</span> 출처 ${esc(p.source_doc)}</div>
+
+    <h3>기본 정보</h3>
+    <dl class="kv">
+      <dt>판매가</dt><dd>${won(p.price)}</dd>
+      <dt>용량 · 구성</dt><dd>${[p.net_weight, p.pack_info].filter(Boolean).map(esc).join(" · ") || "—"}</dd>
+      <dt>원산지</dt><dd>${esc(p.origin) || "—"}</dd>
+      <dt>원재료</dt><dd>${esc(p.ingredients) || "—"}</dd>
+      <dt>판매기간</dt><dd>${esc(p.sale_period) || "연중"}</dd>
+      <dt>설명</dt><dd>${esc(p.description)}</dd>
+    </dl>
+
+    ${secHead(`알레르기 (문서 표기: ${esc(p.allergen_label)})`, "product_allergens")}
+    ${al.length ? al.map((a) => `<div><span class="chip ${a.relation === "함유" ? "contain" : "cross"}">${esc(a.name)} · ${esc(a.relation)}</span>${a.emphasized ? " <b>강조</b>" : ""}
+      ${delBtn("product_allergens", `${a.product_id}/${a.allergen_id}`, `알레르기 ${a.name}`)}${quote(a)}</div>`).join("")
+      : p.allergen_label === "없음(명시)" ? `<span class="chip none">알레르기 유발물질 없음</span>`
+      // '있음'인데 등록된 행이 없으면 '없음'으로 보이지 않게 경고
+      : `<span class="chip cross">표기는 '있음'인데 등록된 알레르기 없음</span>`}
+
+    ${secHead("보관조건", "storage_rules")}
+    <div class="table-wrap"><table>
+      <tr><th>시점</th><th>온도</th><th>허용</th><th>기간</th><th>사유 · 비고</th><th class="w"></th></tr>
+      ${st.map((s) => `<tr class="${s.allowed ? (s.emphasized ? "emph" : "") : "deny"}">
+        <td>${esc(s.timing)}</td><td>${esc(s.temperature)}</td>
+        <td>${s.allowed ? "가능" : "<b>금지</b>"}</td>
+        <td>${s.days != null ? esc(s.days) + "일" + (s.period_text ? ` <span class="src">(${esc(s.period_text)})</span>` : "") : "—"}</td>
+        <td>${esc(s.note)}${quote(s)}</td>
+        <td class="w">${delBtn("storage_rules", s.id, `보관조건 ${s.timing} ${s.temperature}`)}</td></tr>`).join("") || `<tr><td colspan="6" class="src">보관조건 없음</td></tr>`}
+    </table></div>
+
+    ${secHead("주의사항", "cautions")}
+    ${ca.length ? `<div class="table-wrap"><table>
+      <tr><th>유형</th><th>내용</th><th class="w"></th></tr>
+      ${ca.map((c) => `<tr class="${c.emphasized ? "emph" : ""}"><td>${esc(c.type)}</td><td>${esc(c.content)}${quote(c)}</td>
+        <td class="w">${delBtn("cautions", c.id, `주의사항 ${c.type}`)}</td></tr>`).join("")}
+    </table></div>` : `<div class="src">없음</div>`}
+  `;
+}
+
+// ---- 검사 규칙: 각 규칙은 문제 목록(상품코드 + 설명)을 돌려줌
+function runChecks() {
+  const d = DB.raw, ids = new Set(d.products.map((p) => p.product_id));
+  const allergenIds = new Set(d.allergens.map((a) => a.allergen_id));
+  const name = (id) => d.products.find((p) => p.product_id === id)?.name ?? "(없는 상품)";
+  const hit = (id, msg) => ({ id, msg });
+  const rules = [
+    {
+      sev: "err", title: "외래키: 없는 상품을 가리키는 행",
+      desc: "보관조건 · 알레르기 · 주의사항의 product_id가 products에 있어야 함",
+      run: () => ["storage_rules", "product_allergens", "cautions"].flatMap((t) =>
+        d[t].filter((r) => !ids.has(r.product_id)).map((r) => hit(r.product_id, `${t} 에 있음`))),
+    },
+    {
+      sev: "err", title: "외래키: 없는 알레르기코드",
+      desc: "product_allergens.allergen_id가 allergens에 있어야 함",
+      run: () => d.product_allergens.filter((r) => !allergenIds.has(r.allergen_id)).map((r) => hit(r.product_id, r.allergen_id)),
+    },
+    {
+      sev: "err", title: "알레르기 표기와 실제 행이 다름",
+      desc: "'있음'이면 알레르기 행이 1개 이상, '없음(명시)'이면 0개여야 함",
+      run: () => d.products.flatMap((p) => {
+        const n = (DB.allergens[p.product_id] || []).length;
+        if (p.allergen_label === "있음" && !n) return [hit(p.product_id, "'있음'인데 알레르기 행 없음")];
+        if (p.allergen_label === "없음(명시)" && n) return [hit(p.product_id, `'없음(명시)'인데 알레르기 행 ${n}개`)];
+        return [];
+      }),
+    },
+    {
+      sev: "err", title: "같은 시점 · 온도에 '가능'과 '금지'가 함께 있음",
+      desc: "보관조건이 서로 모순",
+      run: () => {
+        const g = by(d.storage_rules, "product_id");
+        return Object.entries(g).flatMap(([id, rs]) => {
+          const m = by(rs.map((r) => ({ ...r, k: r.timing + " / " + r.temperature })), "k");
+          return Object.entries(m).filter(([, x]) => new Set(x.map((r) => r.allowed)).size > 1).map(([k]) => hit(id, k));
+        });
+      },
+    },
+    {
+      sev: "err", title: "보관일수 오류",
+      desc: "금지 행에는 보관일수가 없어야 하고, 가능 행에는 1일 이상이 있어야 함",
+      run: () => d.storage_rules.flatMap((r) => {
+        if (!r.allowed && r.days != null) return [hit(r.product_id, `${r.timing} ${r.temperature}: 금지인데 ${r.days}일`)];
+        if (r.allowed && !(r.days > 0)) return [hit(r.product_id, `${r.timing} ${r.temperature}: 가능인데 보관일수 없음`)];
+        return [];
+      }),
+    },
+    {
+      sev: "err", title: "가격 오류",
+      desc: "판매가는 0보다 큰 숫자",
+      run: () => d.products.filter((p) => !(typeof p.price === "number" && p.price > 0)).map((p) => hit(p.product_id, `판매가 ${p.price}`)),
+    },
+    {
+      sev: "warn", title: "보관조건이 없는 상품",
+      desc: "모든 상품에 보관조건이 1개 이상 있어야 함",
+      run: () => d.products.filter((p) => !(DB.storage[p.product_id] || []).length).map((p) => hit(p.product_id, "보관조건 0개")),
+    },
+    {
+      sev: "warn", title: "근거 문장 누락",
+      desc: "보관조건 · 알레르기 · 주의사항의 모든 행에 출처문서와 원문이 있어야 함",
+      run: () => ["storage_rules", "product_allergens", "cautions"].flatMap((t) =>
+        d[t].filter((r) => !r.source_doc || !r.source_text).map((r) => hit(r.product_id, `${t}: 근거 없음`))),
+    },
+    {
+      sev: "warn", title: "개봉 전 보관기간이 없는 상품",
+      desc: "'개봉 후' 행은 있는데 '개봉 전' 행이 없음 — 문서에 없는지 확인",
+      run: () => Object.entries(DB.storage).filter(([, rs]) => rs.some((r) => r.timing === "개봉 후") && !rs.some((r) => r.timing === "개봉 전"))
+        .map(([id]) => hit(id, "개봉 전 기간 없음")),
+    },
+    {
+      sev: "info", title: "원산지가 문서에 없음",
+      desc: "원산지가 비어 있거나 '(문서에 없음)'",
+      run: () => d.products.filter((p) => !p.origin || p.origin === "(문서에 없음)").map((p) => hit(p.product_id, p.origin || "빈칸")),
+    },
+    {
+      sev: "info", title: "보관 금지 항목 (함정 질문 근거)",
+      desc: "허용 = 금지인 보관조건. 답변할 때 반드시 반영해야 하는 내용",
+      run: () => d.storage_rules.filter((r) => !r.allowed).map((r) => hit(r.product_id, `${r.timing} ${r.temperature} 금지 — ${r.note ?? ""}`)),
+    },
+  ];
+  return rules.map((r) => ({ ...r, hits: r.run().map((h) => ({ ...h, name: name(h.id) })) }));
+}
+
+function renderChecks() {
+  const results = runChecks();
+  const count = (sev) => results.filter((r) => r.sev === sev).reduce((n, r) => n + r.hits.length, 0);
+  const errs = count("err"), warns = count("warn");
+  const passed = results.filter((r) => r.sev !== "info" && !r.hits.length).length;
+  const total = results.filter((r) => r.sev !== "info").length;
+  $("check-summary").innerHTML = `
+    <div class="panel stat err"><span>오류</span><b>${errs}</b></div>
+    <div class="panel stat warn"><span>경고</span><b>${warns}</b></div>
+    <div class="panel stat ok"><span>통과한 규칙</span><b>${passed} / ${total}</b></div>`;
+  const ic = $("issue-count");
+  ic.textContent = errs + warns;
+  ic.classList.toggle("hidden", !(errs + warns));
+  const label = { err: "오류", warn: "경고", info: "참고" };
+  $("check-list").innerHTML = results.map((r) => {
+    const sev = r.hits.length ? r.sev : (r.sev === "info" ? "info" : "ok");
+    const tag = r.hits.length ? `${label[r.sev]} ${r.hits.length}건` : (r.sev === "info" ? "해당 없음" : "통과");
+    return `<div class="check">
+      <div class="head"><span class="sev ${sev}">${tag}</span><b>${esc(r.title)}</b></div>
+      <div class="desc">${esc(r.desc)}</div>
+      ${r.hits.length ? `<ul>${r.hits.map((h) => `<li><a class="plink" data-id="${esc(h.id)}">${esc(h.id)} ${esc(h.name)}</a> — ${esc(h.msg)}</li>`).join("")}</ul>` : ""}
+    </div>`;
+  }).join("");
+}
+
+function renderShipping() {
+  $("shipping").innerHTML = `<h2>배송정책</h2><div class="src">모든 상품 공통</div><h3>항목</h3>
+    <dl class="kv">${DB.raw.shipping_policies.map((s) => `<dt>${esc(s.item)}</dt><dd>${/^\d+$/.test(s.value) ? won(Number(s.value)) : esc(s.value)}</dd>`).join("")}</dl>`;
+}
+
+function showTab(name) {
+  document.querySelectorAll("nav button").forEach((b) => b.classList.toggle("active", b.dataset.tab === name));
+  ["browse", "checks", "shipping"].forEach((t) => $("tab-" + t).classList.toggle("hidden", t !== name));
+}
+
+function select(id) {
+  selected = id;
+  creating = false;
+  showTab("browse");
+  renderList();
+  renderDetail();
+}
+
+// 상세 패널: 추가 폼 열기 · 닫기, 삭제
+$("detail").addEventListener("click", async (e) => {
+  const add = e.target.closest("[data-add]");
+  if (add) {
+    const slot = $("detail").querySelector(`[data-slot="${add.dataset.add}"]`);
+    slot.innerHTML = slot.innerHTML ? "" : formHtml(add.dataset.add);
+    slot.querySelector("select, input")?.focus();
+    return;
+  }
+  if (e.target.closest("[data-cancel]")) {
+    if (creating) { creating = false; renderDetail(); }
+    else e.target.closest("form").remove();
+    return;
+  }
+  const del = e.target.closest("[data-del]");
+  if (del) {
+    const table = del.dataset.del;
+    let msg = `${del.dataset.label} 을(를) 삭제할까요?`;
+    if (table === "products") {
+      const id = del.dataset.key;
+      const n = (DB.storage[id] || []).length + (DB.allergens[id] || []).length + (DB.cautions[id] || []).length;
+      msg += `\n연결된 보관조건 · 알레르기 · 주의사항 ${n}건도 함께 삭제됩니다.`;
+    }
+    if (!confirm(msg + "\n되돌릴 수 없습니다.")) return;
+    try {
+      await api("DELETE", `/api/${table}/${del.dataset.key.split("/").map(encodeURIComponent).join("/")}`);
+      toast("삭제했습니다");
+      await load();
+    } catch (err) {
+      alert("삭제 실패: " + err.message);
+    }
+  }
+});
+
+// 허용 = 금지이면 보관일수 입력을 막음
+$("detail").addEventListener("change", (e) => {
+  if (e.target.name !== "allowed") return;
+  const days = e.target.form.elements.days;
+  days.disabled = e.target.value === "false";
+  if (days.disabled) days.value = "";
+});
+
+$("detail").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const form = e.target, table = form.dataset.table;
+  const body = formData(form);
+  if (table !== "products") {
+    // 하위 행은 현재 상품에 연결하고, 출처문서는 상품의 출처문서를 그대로 씀
+    const p = DB.products.find((x) => x.product_id === selected);
+    body.product_id = p.product_id;
+    body.source_doc = p.source_doc;
+  }
+  const btn = form.querySelector("button[type=submit]");
+  btn.disabled = true;
+  try {
+    await api("POST", `/api/${table}`, body);
+    if (table === "products") { selected = body.product_id; creating = false; }
+    toast("저장했습니다");
+    await load();
+  } catch (err) {
+    form.querySelector(".form-err").textContent = err.message;
+    btn.disabled = false;
+  }
+});
+
+$("new-product").addEventListener("click", () => {
+  creating = true;
+  selected = null;
+  showTab("browse");
+  renderList();
+  renderDetail();
+});
+
+// 이벤트
+document.querySelector("nav").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) showTab(b.dataset.tab); });
+$("list").addEventListener("click", (e) => { const it = e.target.closest(".item"); if (it) select(it.dataset.id); });
+$("check-list").addEventListener("click", (e) => { const a = e.target.closest(".plink"); if (a) select(a.dataset.id); });
+["q", "f-cat", "f-allergen", "f-temp", "f-emph"].forEach((id) => $(id).addEventListener("input", () => DB && renderList()));
+$("reload").addEventListener("click", load);
+load();
+</script>
+</body>
+</html>

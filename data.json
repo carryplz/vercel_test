@@ -1,0 +1,625 @@
+{
+  "products": [
+    {
+      "product_id": "P-0113",
+      "name": "대구사과칩",
+      "category": "가공식품",
+      "price": 4900,
+      "net_weight": "60g",
+      "pack_info": null,
+      "origin": "대구 팔공산",
+      "ingredients": "사과 100%",
+      "description": "팔공산 사과 100%를 저온에서 말린 과자. 설탕 · 첨가물 없음. 글루텐 없음",
+      "sale_period": null,
+      "allergen_label": "있음",
+      "source_doc": "P-0113_대구사과칩.md"
+    },
+    {
+      "product_id": "P-0127",
+      "name": "팔공산 꿀사과",
+      "category": "신선식품",
+      "price": 18000,
+      "net_weight": "2kg",
+      "pack_info": "7~9개",
+      "origin": "대구 팔공산",
+      "ingredients": "사과",
+      "description": "팔공산 해발 400m 과수원의 부사. 당도 14Brix 이상 선별. 표면 왁스 코팅 없음",
+      "sale_period": null,
+      "allergen_label": "없음(명시)",
+      "source_doc": "P-0127_팔공산 꿀사과.md"
+    },
+    {
+      "product_id": "P-0205",
+      "name": "성주 참외",
+      "category": "신선식품",
+      "price": 12000,
+      "net_weight": "1.5kg",
+      "pack_info": "5~6개",
+      "origin": "경북 성주",
+      "ingredients": "참외",
+      "description": "성주 하우스 참외 특품",
+      "sale_period": "4~7월 한정",
+      "allergen_label": "없음(명시)",
+      "source_doc": "P-0205_성주 참외.md"
+    },
+    {
+      "product_id": "P-0207",
+      "name": "참외청",
+      "category": "가공식품",
+      "price": 9500,
+      "net_weight": "350ml",
+      "pack_info": null,
+      "origin": "경북 성주(참외) · 국내산(원당)",
+      "ingredients": "참외, 비정제 원당",
+      "description": "성주 참외와 비정제 원당을 1:1로 재운 청",
+      "sale_period": null,
+      "allergen_label": "없음(명시)",
+      "source_doc": "P-0207_참외청.md"
+    },
+    {
+      "product_id": "P-0305",
+      "name": "청도 반건시",
+      "category": "가공식품",
+      "price": 15000,
+      "net_weight": "500g",
+      "pack_info": "10개",
+      "origin": "경북 청도",
+      "ingredients": "감",
+      "description": "청도 감을 20일 자연 건조한 반건시. 겉은 쫀득, 속은 촉촉",
+      "sale_period": null,
+      "allergen_label": "없음(명시)",
+      "source_doc": "P-0305_청도 반건시.md"
+    },
+    {
+      "product_id": "P-0312",
+      "name": "의성 마늘",
+      "category": "신선식품",
+      "price": 11000,
+      "net_weight": "1kg",
+      "pack_info": "약 15통",
+      "origin": "경북 의성",
+      "ingredients": "마늘",
+      "description": "의성 한지형 마늘. 알이 단단하고 매운맛이 강함",
+      "sale_period": null,
+      "allergen_label": "없음(명시)",
+      "source_doc": "P-0312_의성 마늘.md"
+    },
+    {
+      "product_id": "P-0318",
+      "name": "흑마늘 진액",
+      "category": "가공식품",
+      "price": 24000,
+      "net_weight": "70ml × 30포",
+      "pack_info": "30포",
+      "origin": "경북 의성",
+      "ingredients": "흑마늘, 정제수",
+      "description": "의성 마늘을 15일 숙성한 흑마늘 추출액",
+      "sale_period": null,
+      "allergen_label": "없음(명시)",
+      "source_doc": "P-0318_흑마늘 진액.md"
+    },
+    {
+      "product_id": "P-0402",
+      "name": "서문시장 납작만두",
+      "category": "냉동식품",
+      "price": 7900,
+      "net_weight": "500g",
+      "pack_info": "20개",
+      "origin": "(문서에 없음)",
+      "ingredients": "밀가루, 당면, 부추, 대두(간장)",
+      "description": "서문시장식 납작만두. 당면 · 부추 소, 간장 양념 포함",
+      "sale_period": null,
+      "allergen_label": "있음",
+      "source_doc": "P-0402_서문시장 납작만두.md"
+    },
+    {
+      "product_id": "P-0410",
+      "name": "달성 토마토",
+      "category": "신선식품",
+      "price": 8500,
+      "net_weight": "1kg",
+      "pack_info": "6~8개",
+      "origin": "대구 달성",
+      "ingredients": "토마토",
+      "description": "달성군 하빈면 완숙 토마토. 산도가 낮아 생식용",
+      "sale_period": null,
+      "allergen_label": "없음(명시)",
+      "source_doc": "P-0410_달성 토마토.md"
+    },
+    {
+      "product_id": "P-0421",
+      "name": "경산 대추칩",
+      "category": "가공식품",
+      "price": 5500,
+      "net_weight": "50g",
+      "pack_info": null,
+      "origin": "경북 경산",
+      "ingredients": "대추 100%",
+      "description": "경산 대추를 씨 빼고 말린 칩",
+      "sale_period": null,
+      "allergen_label": "있음",
+      "source_doc": "P-0421_경산 대추칩.md"
+    }
+  ],
+  "storage_rules": [
+    {
+      "id": 1,
+      "product_id": "P-0113",
+      "timing": "개봉 전",
+      "temperature": "상온",
+      "allowed": true,
+      "days": 180,
+      "period_text": "6개월",
+      "note": null,
+      "emphasized": false,
+      "source_doc": "P-0113_대구사과칩.md",
+      "source_section": "보관법",
+      "source_text": "개봉 전 유통기한 6개월"
+    },
+    {
+      "id": 2,
+      "product_id": "P-0113",
+      "timing": "개봉 후",
+      "temperature": "상온",
+      "allowed": true,
+      "days": 7,
+      "period_text": "7일",
+      "note": "밀봉해 서늘한 곳",
+      "emphasized": false,
+      "source_doc": "P-0113_대구사과칩.md",
+      "source_section": "보관법",
+      "source_text": "밀봉해 서늘한 곳에서 7일 이내 섭취."
+    },
+    {
+      "id": 3,
+      "product_id": "P-0113",
+      "timing": "개봉 후",
+      "temperature": "냉장",
+      "allowed": false,
+      "days": null,
+      "period_text": null,
+      "note": "습기를 먹어 눅눅해짐",
+      "emphasized": true,
+      "source_doc": "P-0113_대구사과칩.md",
+      "source_section": "보관법",
+      "source_text": "개봉 후 냉장 금지 — 습기를 먹어 눅눅해짐."
+    },
+    {
+      "id": 4,
+      "product_id": "P-0127",
+      "timing": "수령 후",
+      "temperature": "냉장",
+      "allowed": true,
+      "days": 21,
+      "period_text": "3주",
+      "note": null,
+      "emphasized": false,
+      "source_doc": "P-0127_팔공산 꿀사과.md",
+      "source_section": "보관법",
+      "source_text": "냉장 보관 시 3주, 상온 보관 시 7일."
+    },
+    {
+      "id": 5,
+      "product_id": "P-0127",
+      "timing": "수령 후",
+      "temperature": "상온",
+      "allowed": true,
+      "days": 7,
+      "period_text": "7일",
+      "note": null,
+      "emphasized": false,
+      "source_doc": "P-0127_팔공산 꿀사과.md",
+      "source_section": "보관법",
+      "source_text": "냉장 보관 시 3주, 상온 보관 시 7일."
+    },
+    {
+      "id": 6,
+      "product_id": "P-0205",
+      "timing": "수령 후",
+      "temperature": "냉장",
+      "allowed": true,
+      "days": 5,
+      "period_text": "5일",
+      "note": "받은 날부터 3일 안에 섭취 권장",
+      "emphasized": false,
+      "source_doc": "P-0205_성주 참외.md",
+      "source_section": "보관법",
+      "source_text": "냉장 보관 5일."
+    },
+    {
+      "id": 7,
+      "product_id": "P-0207",
+      "timing": "개봉 전",
+      "temperature": "상온",
+      "allowed": true,
+      "days": 360,
+      "period_text": "12개월",
+      "note": null,
+      "emphasized": false,
+      "source_doc": "P-0207_참외청.md",
+      "source_section": "보관법",
+      "source_text": "개봉 전 상온 보관 12개월."
+    },
+    {
+      "id": 8,
+      "product_id": "P-0207",
+      "timing": "개봉 후",
+      "temperature": "냉장",
+      "allowed": true,
+      "days": 30,
+      "period_text": "30일",
+      "note": null,
+      "emphasized": false,
+      "source_doc": "P-0207_참외청.md",
+      "source_section": "보관법",
+      "source_text": "개봉 후 냉장 보관 30일."
+    },
+    {
+      "id": 9,
+      "product_id": "P-0305",
+      "timing": "수령 후",
+      "temperature": "냉장",
+      "allowed": true,
+      "days": 10,
+      "period_text": "10일",
+      "note": "받은 즉시 냉장",
+      "emphasized": false,
+      "source_doc": "P-0305_청도 반건시.md",
+      "source_section": "보관법",
+      "source_text": "냉장 보관 10일."
+    },
+    {
+      "id": 10,
+      "product_id": "P-0305",
+      "timing": "수령 후",
+      "temperature": "냉동",
+      "allowed": false,
+      "days": null,
+      "period_text": null,
+      "note": "해동하면 수분이 빠져 질겨짐",
+      "emphasized": true,
+      "source_doc": "P-0305_청도 반건시.md",
+      "source_section": "보관법",
+      "source_text": "냉동 보관 금지 — 해동하면 수분이 빠져 질겨짐."
+    },
+    {
+      "id": 11,
+      "product_id": "P-0312",
+      "timing": "수령 후",
+      "temperature": "상온",
+      "allowed": true,
+      "days": 60,
+      "period_text": "2개월",
+      "note": "통풍이 잘 되는 그늘",
+      "emphasized": false,
+      "source_doc": "P-0312_의성 마늘.md",
+      "source_section": "보관법",
+      "source_text": "통풍이 잘 되는 그늘에 상온 보관 2개월."
+    },
+    {
+      "id": 12,
+      "product_id": "P-0312",
+      "timing": "수령 후",
+      "temperature": "냉장",
+      "allowed": false,
+      "days": null,
+      "period_text": null,
+      "note": "싹이 남",
+      "emphasized": false,
+      "source_doc": "P-0312_의성 마늘.md",
+      "source_section": "보관법",
+      "source_text": "냉장 보관은 싹이 남"
+    },
+    {
+      "id": 13,
+      "product_id": "P-0318",
+      "timing": "개봉 전",
+      "temperature": "상온",
+      "allowed": true,
+      "days": 540,
+      "period_text": "18개월",
+      "note": "여름철에는 냉장 보관 권장",
+      "emphasized": false,
+      "source_doc": "P-0318_흑마늘 진액.md",
+      "source_section": "보관법",
+      "source_text": "개봉 전 상온 보관 18개월."
+    },
+    {
+      "id": 14,
+      "product_id": "P-0318",
+      "timing": "개봉 후",
+      "temperature": "상온",
+      "allowed": true,
+      "days": 1,
+      "period_text": "당일",
+      "note": "개봉한 포는 당일 섭취",
+      "emphasized": false,
+      "source_doc": "P-0318_흑마늘 진액.md",
+      "source_section": "보관법",
+      "source_text": "개봉한 포는 당일 섭취."
+    },
+    {
+      "id": 15,
+      "product_id": "P-0402",
+      "timing": "수령 후",
+      "temperature": "냉동",
+      "allowed": true,
+      "days": 90,
+      "period_text": "3개월",
+      "note": null,
+      "emphasized": false,
+      "source_doc": "P-0402_서문시장 납작만두.md",
+      "source_section": "보관법",
+      "source_text": "냉동 보관 3개월."
+    },
+    {
+      "id": 16,
+      "product_id": "P-0410",
+      "timing": "수령 후",
+      "temperature": "상온",
+      "allowed": true,
+      "days": 3,
+      "period_text": "3일",
+      "note": null,
+      "emphasized": false,
+      "source_doc": "P-0410_달성 토마토.md",
+      "source_section": "보관법",
+      "source_text": "실온 보관 3일, 냉장 보관 7일."
+    },
+    {
+      "id": 17,
+      "product_id": "P-0410",
+      "timing": "수령 후",
+      "temperature": "냉장",
+      "allowed": true,
+      "days": 7,
+      "period_text": "7일",
+      "note": null,
+      "emphasized": false,
+      "source_doc": "P-0410_달성 토마토.md",
+      "source_section": "보관법",
+      "source_text": "실온 보관 3일, 냉장 보관 7일."
+    },
+    {
+      "id": 18,
+      "product_id": "P-0421",
+      "timing": "개봉 후",
+      "temperature": "상온",
+      "allowed": true,
+      "days": 14,
+      "period_text": "14일",
+      "note": "밀봉. 개봉 전 기간은 문서에 없음",
+      "emphasized": false,
+      "source_doc": "P-0421_경산 대추칩.md",
+      "source_section": "보관법",
+      "source_text": "개봉 후 밀봉해 상온 보관 14일."
+    }
+  ],
+  "allergens": [
+    {
+      "allergen_id": "A01",
+      "name": "밀"
+    },
+    {
+      "allergen_id": "A02",
+      "name": "대두"
+    },
+    {
+      "allergen_id": "A03",
+      "name": "계란"
+    },
+    {
+      "allergen_id": "A04",
+      "name": "견과류"
+    }
+  ],
+  "product_allergens": [
+    {
+      "product_id": "P-0113",
+      "allergen_id": "A04",
+      "relation": "교차오염",
+      "emphasized": true,
+      "source_doc": "P-0113_대구사과칩.md",
+      "source_section": "알레르기 · 원산지",
+      "source_text": "견과류 생산 라인 공유 — 견과류 알레르기 주의"
+    },
+    {
+      "product_id": "P-0402",
+      "allergen_id": "A01",
+      "relation": "함유",
+      "emphasized": true,
+      "source_doc": "P-0402_서문시장 납작만두.md",
+      "source_section": "알레르기 · 원산지",
+      "source_text": "밀 · 대두 알레르기 주의"
+    },
+    {
+      "product_id": "P-0402",
+      "allergen_id": "A02",
+      "relation": "함유",
+      "emphasized": true,
+      "source_doc": "P-0402_서문시장 납작만두.md",
+      "source_section": "알레르기 · 원산지",
+      "source_text": "밀 · 대두 알레르기 주의"
+    },
+    {
+      "product_id": "P-0402",
+      "allergen_id": "A03",
+      "relation": "교차오염",
+      "emphasized": false,
+      "source_doc": "P-0402_서문시장 납작만두.md",
+      "source_section": "알레르기 · 원산지",
+      "source_text": "제조 라인에서 계란 사용"
+    },
+    {
+      "product_id": "P-0421",
+      "allergen_id": "A04",
+      "relation": "교차오염",
+      "emphasized": true,
+      "source_doc": "P-0421_경산 대추칩.md",
+      "source_section": "알레르기 · 원산지",
+      "source_text": "견과류 생산 라인 공유 — 견과류 알레르기 주의"
+    }
+  ],
+  "cautions": [
+    {
+      "id": 1,
+      "product_id": "P-0127",
+      "type": "보관팁",
+      "content": "다른 과일과 함께 두지 않기(에틸렌으로 빨리 익음)",
+      "emphasized": false,
+      "source_doc": "P-0127_팔공산 꿀사과.md",
+      "source_section": "보관법",
+      "source_text": "다른 과일과 함께 두지 않기(에틸렌으로 다른 과일이 빨리 익음)"
+    },
+    {
+      "id": 2,
+      "product_id": "P-0207",
+      "type": "조리·사용금지",
+      "content": "금속 숟가락 사용 금지(발효가 빨라짐) — 나무 · 플라스틱 사용",
+      "emphasized": true,
+      "source_doc": "P-0207_참외청.md",
+      "source_section": "보관법",
+      "source_text": "금속 숟가락 사용 금지 — 발효가 빨라짐, 나무 또는 플라스틱 사용"
+    },
+    {
+      "id": 3,
+      "product_id": "P-0207",
+      "type": "사용팁",
+      "content": "탄산수 희석 비율 1:4",
+      "emphasized": false,
+      "source_doc": "P-0207_참외청.md",
+      "source_section": "설명",
+      "source_text": "탄산수 희석 비율 1:4"
+    },
+    {
+      "id": 4,
+      "product_id": "P-0305",
+      "type": "사용팁",
+      "content": "표면 흰 가루는 당분이 굳은 것으로 정상",
+      "emphasized": false,
+      "source_doc": "P-0305_청도 반건시.md",
+      "source_section": "알레르기 · 원산지",
+      "source_text": "표면의 흰 가루는 당분이 굳은 것으로 정상"
+    },
+    {
+      "id": 5,
+      "product_id": "P-0312",
+      "type": "보관팁",
+      "content": "비닐봉지 밀봉 금지(곰팡이) — 망에 보관",
+      "emphasized": false,
+      "source_doc": "P-0312_의성 마늘.md",
+      "source_section": "보관법",
+      "source_text": "비닐봉지에 밀봉하면 곰팡이가 생기므로 망에 보관."
+    },
+    {
+      "id": 6,
+      "product_id": "P-0318",
+      "type": "섭취주의",
+      "content": "임산부 · 수술 전후는 섭취 전 전문가 상담",
+      "emphasized": false,
+      "source_doc": "P-0318_흑마늘 진액.md",
+      "source_section": "알레르기 · 원산지",
+      "source_text": "임산부 · 수술 전후는 섭취 전 전문가 상담"
+    },
+    {
+      "id": 7,
+      "product_id": "P-0318",
+      "type": "사용팁",
+      "content": "하루 1포 권장",
+      "emphasized": false,
+      "source_doc": "P-0318_흑마늘 진액.md",
+      "source_section": "설명",
+      "source_text": "하루 1포 권장"
+    },
+    {
+      "id": 8,
+      "product_id": "P-0402",
+      "type": "조리·사용금지",
+      "content": "전자레인지 조리 금지(피가 질겨짐)",
+      "emphasized": true,
+      "source_doc": "P-0402_서문시장 납작만두.md",
+      "source_section": "보관법",
+      "source_text": "전자레인지 조리 금지 — 피가 질겨짐"
+    },
+    {
+      "id": 9,
+      "product_id": "P-0402",
+      "type": "사용팁",
+      "content": "해동하지 말고 냉동 상태로 팬에 기름 두르고 중불 3분",
+      "emphasized": false,
+      "source_doc": "P-0402_서문시장 납작만두.md",
+      "source_section": "보관법",
+      "source_text": "해동하지 말고 냉동 상태로 팬에 기름 두르고 중불 3분."
+    },
+    {
+      "id": 10,
+      "product_id": "P-0410",
+      "type": "보관팁",
+      "content": "꼭지를 아래로 두고 보관(수분 증발 감소)",
+      "emphasized": true,
+      "source_doc": "P-0410_달성 토마토.md",
+      "source_section": "보관법",
+      "source_text": "꼭지를 아래로 두고 보관 — 수분 증발을 줄임."
+    },
+    {
+      "id": 11,
+      "product_id": "P-0410",
+      "type": "사용팁",
+      "content": "냉장 후 먹기 30분 전 꺼내면 맛이 돌아옴",
+      "emphasized": false,
+      "source_doc": "P-0410_달성 토마토.md",
+      "source_section": "보관법",
+      "source_text": "냉장 후 먹기 30분 전 꺼내면 맛이 돌아옴"
+    },
+    {
+      "id": 12,
+      "product_id": "P-0421",
+      "type": "보관팁",
+      "content": "실리카겔 버리지 않기(습기에 약함)",
+      "emphasized": false,
+      "source_doc": "P-0421_경산 대추칩.md",
+      "source_section": "보관법",
+      "source_text": "습기에 약하므로 실리카겔을 버리지 않기"
+    },
+    {
+      "id": 13,
+      "product_id": "P-0421",
+      "type": "사용팁",
+      "content": "차로 우려도 됨(80℃ 물 300ml에 5조각)",
+      "emphasized": false,
+      "source_doc": "P-0421_경산 대추칩.md",
+      "source_section": "설명",
+      "source_text": "차로 우려도 됨(80℃ 물 300ml에 5조각)"
+    }
+  ],
+  "shipping_policies": [
+    {
+      "item": "당일 배송 지역",
+      "value": "수성구, 달서구"
+    },
+    {
+      "item": "당일 배송 마감",
+      "value": "오후 2시 이전 주문"
+    },
+    {
+      "item": "그 외 지역",
+      "value": "익일 배송"
+    },
+    {
+      "item": "무료 배송 기준",
+      "value": "30000"
+    },
+    {
+      "item": "기본 배송비",
+      "value": "2500"
+    },
+    {
+      "item": "신선 식품 발송 요일",
+      "value": "월~목"
+    },
+    {
+      "item": "금요일 주문(신선 식품)",
+      "value": "다음 주 월요일 발송"
+    }
+  ]
+}
